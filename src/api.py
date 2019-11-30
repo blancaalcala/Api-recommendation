@@ -1,8 +1,6 @@
 from bottle import route, run, get, post, request
 from mongo import CollConection
 
-
-
 #@get("/user/<user_id>/recommend")
 #def 
 

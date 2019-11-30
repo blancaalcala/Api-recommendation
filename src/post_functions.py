@@ -1,3 +1,6 @@
+import requests
+import pandas as pd
+
 def createUser(username):
     url="http://localhost:8080/user/create"
     params={'username':username}
