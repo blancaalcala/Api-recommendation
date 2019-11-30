@@ -23,16 +23,21 @@ def addusertochat(chat_id):
     user_id=request.forms.getlist("userid")
     return collChat.addUsertoChat(user_id,chat_id)
 
+@post('/message/<userid>/create')
+def addmessage(userid):
+    message=request.forms.get("message")
+    return collMessage.addMessage(message,userid)
+
 @post('/chat/<chat_id>/addmessage')
 def addMessagetoChat(chat_id):
-    user_id=request.forms.get("userid")
     message=request.forms.get("message")
-    #return {collChat.addUsertoChat(user_id,chat_id)
-     #       collChat.addMessagetoChat()
+    return collChat.addMessagetoChat(chat_id,message)
 
 
 collUser=CollConection('API','user')
 collChat=CollConection('API','chat')
+collMessage=CollConection('API','message')
+
 
 run(host='0.0.0.0', port=8080)
 

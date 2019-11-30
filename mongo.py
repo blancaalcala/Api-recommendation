@@ -1,6 +1,10 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
+users = []
+messages = []
+chats = []
+
 
 class CollConection:
 
@@ -8,21 +12,18 @@ class CollConection:
         self.client = MongoClient()
         self.db = self.client[dbName]
         self.collection=self.db[collection]
-
-    def addDocument(self,document):
-        a=self.collection.insert_one(document)
-        print(a.inserted_id)
-        return a.inserted_id
     
     def addUser(self,user):
         document={'username':user}
         a=self.collection.insert_one(document)
-        return {a.inserted_id}
+        users.append([user,a.inserted_id])
+        return users
 
     def addChat(self,chat):
         document={'chatname':chat}
         a=self.collection.insert_one(document)
-        return {a.inserted_id}
+        chats.append([chat,a.inserted_id])
+        return chats
 
     def addUsertoChat(self,user,chat):
         document = {'user_id':user}
@@ -31,14 +32,22 @@ class CollConection:
         {'$set':{'user_id':user}})
         return {"user_id":user}
 
-    def addMessagetoChat(self,user,chat,text):
-        User = {'user_id':user}
-        Message = {'message':text}
-        a=self.collection.update_one(
-        {'_id':ObjectId(chat)},
-        {'$set':[{'user_id':user},{'message':Message}]})
-        return {"message_id":message}
+    def addMessage(self,message,user):
+        document={'message':message}
+        a=self.collection.insert_one(document)
+        b=self.collection.update_one(
+        {'_id':ObjectId(a.inserted_id)},
+        {'$set':{'user_id':user}})
+        messages.append([message,a.inserted_id])
+        return messages
 
+    def addMessagetoChat(self,chat,message):
+        chatid = {'chatid':chat}
+        message = {'messageid':message}
+        a=self.collection.update_one(
+        {'_id':chatid['chatid']},
+        {'$set':(message)})
+        print(message)
 
     
 
