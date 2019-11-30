@@ -1,10 +1,6 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-users = []
-messages = []
-chats = []
-
 
 class CollConection:
 
@@ -16,39 +12,32 @@ class CollConection:
     def addUser(self,user):
         document={'username':user}
         a=self.collection.insert_one(document)
-        users.append([user,a.inserted_id])
-        return users
+        return a.inserted_id
 
-    def addChat(self,chat):
-        document={'chatname':chat}
-        a=self.collection.insert_one(document)
-        chats.append([chat,a.inserted_id])
-        return chats
-
-    def addUsertoChat(self,user,chat):
-        document = {'user_id':user}
-        a=self.collection.update_one(
-        {'_id':ObjectId(chat)},
-        {'$set':{'user_id':user}})
-        return {"user_id":user}
-
-    def addMessage(self,message,user):
-        document={'message':message}
-        a=self.collection.insert_one(document)
+    def addChat(self,chat,user):
+        a=self.collection.insert_one({'chatname':chat})
         b=self.collection.update_one(
         {'_id':ObjectId(a.inserted_id)},
-        {'$set':{'user_id':user}})
-        messages.append([message,a.inserted_id])
-        return messages
+        {'$set':{'users_list':user}})
+        return a.inserted_id
 
-    def addMessagetoChat(self,chat,message):
-        chatid = {'chatid':chat}
-        message = {'messageid':message}
-        a=self.collection.update_one(
-        {'_id':chatid['chatid']},
-        {'$set':(message)})
-        print(message)
+    def addUsertoChat(self,user,chat):
+        a=self.collection.update(
+        {'_id':ObjectId(chat)},
+        {'$push':{'users_list':{'$each':user}}})
+        return chat
 
+    def addMessage(self,message):
+        a=self.collection.insert_one({'message':message})
+        return a.inserted_id
+
+    def addMessagetoChat(self,message,user,chat,message_id):
+        document = {'message':message}
+        a=self.collection.update(
+        {'_id':ObjectId(chat)},
+        {'$push':{'messages':message}})
+        return message_id
+    
     
 
 

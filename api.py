@@ -9,34 +9,31 @@ from mongo import CollConection
 @post('/user/create')
 def adduser():
     username=request.forms.get("username")
-    return {
-        "user_id": str(collUser.addUser(username))}
+    return str(collUser.addUser(username))
 
 @post('/chat/create')
 def addchat():
-    chatname=request.forms.get("chatname")
-    return {
-        "chat_id": str(collChat.addChat(chatname))}
+    chat=request.forms.get("chatname")
+    user_list=request.forms.getlist("users")
+    return str(collChat.addChat(chat,user_list))
 
 @post('/chat/<chat_id>/adduser')
 def addusertochat(chat_id):
     user_id=request.forms.getlist("userid")
     return collChat.addUsertoChat(user_id,chat_id)
 
-@post('/message/<userid>/create')
-def addmessage(userid):
-    message=request.forms.get("message")
-    return collMessage.addMessage(message,userid)
-
 @post('/chat/<chat_id>/addmessage')
-def addMessagetoChat(chat_id):
+def addmessage(chat_id):
     message=request.forms.get("message")
-    return collChat.addMessagetoChat(chat_id,message)
+    user_id=request.forms.get("user_id")
+    message_id = str(collMessage.addMessage(message))
+    return collChat.addMessagetoChat(message,user_id,chat_id,message_id)
 
 
 collUser=CollConection('API','user')
 collChat=CollConection('API','chat')
 collMessage=CollConection('API','message')
+
 
 
 run(host='0.0.0.0', port=8080)
