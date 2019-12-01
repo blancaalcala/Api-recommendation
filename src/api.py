@@ -6,6 +6,14 @@ def adduser():
     username=request.forms.get("username")
     return str(collUser.addUser(username))
 
+@get("/user/<user_id>/recommend")
+def getuserrecommendation(user_id):
+    users = collMessage.getUserRecommendation(user_id)
+    users_list = []
+    for u in users.values():
+        users_list.append(collUser.getUser(u)['user']['username'])
+    return {'Recommended users':users_list}
+
 @post('/chat/create')
 def addchat():
     chat=request.forms.get("chatname")
@@ -21,7 +29,7 @@ def addusertochat(chat_id):
 def addmessage(chat_id):
     message=request.forms.get("message")
     user_id=request.forms.get("user_id")
-    message_id = str(collMessage.addMessage(message))
+    message_id = str(collMessage.addMessage(message,user_id))
     return collChat.addMessagetoChat(message,user_id,chat_id,message_id)
 
 @get("/chat/<chat_id>/list")
@@ -38,8 +46,6 @@ def getchatsentiment(chat_id):
 collUser=CollConection('API','user')
 collChat=CollConection('API','chat')
 collMessage=CollConection('API','message')
-
-
 
 run(host='0.0.0.0', port=8080)
 
