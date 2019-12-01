@@ -18,5 +18,5 @@ chats = F.appendInfo(chatname,chat_id,chats)
 
 F.addUser(chats.loc[0].ID,[users.loc[0].ID,users.loc[1].ID])
 
-message,message_id= F.addMessage(chats.loc[1].ID,"i am very tired",users.loc[2].ID)
+message,message_id= F.addMessage(chats.loc[0].ID,"i am very tired",users.loc[2].ID)
 messages = F.appendInfo(message,message_id,messages)

@@ -1,9 +1,6 @@
 from bottle import route, run, get, post, request
 from mongo import CollConection
 
-#@get("/user/<user_id>/recommend")
-#def 
-
 @post('/user/create')
 def adduser():
     username=request.forms.get("username")
@@ -26,6 +23,16 @@ def addmessage(chat_id):
     user_id=request.forms.get("user_id")
     message_id = str(collMessage.addMessage(message))
     return collChat.addMessagetoChat(message,user_id,chat_id,message_id)
+
+@get("/chat/<chat_id>/list")
+def getchat(chat_id):   
+    return collChat.getMessages(chat_id)
+
+
+@get("/chat/<chat_id>/sentiment")
+def getchatsentiment(chat_id):
+    return collChat.getChatSentiment(chat_id)
+    
 
 
 collUser=CollConection('API','user')

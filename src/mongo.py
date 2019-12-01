@@ -1,5 +1,10 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+import nltk 
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import get as G
+
+sid = SentimentIntensityAnalyzer()
 
 
 class CollConection:
@@ -37,6 +42,18 @@ class CollConection:
         {'_id':ObjectId(chat)},
         {'$push':{'messages':message}})
         return message_id
+
+    def getMessages(self,chat):
+        x = list(self.collection.find({'_id':ObjectId(chat)},{'messages':1,'_id':0}))
+        return {'list':x}
+
+    def getChatSentiment(self,chat):
+        message_list = G.getMessages(chat)
+        message_string = ""
+        for m in message_list:
+            message_string += m+" "
+        return sid.polarity_scores(message_string)
+
     
     
 
