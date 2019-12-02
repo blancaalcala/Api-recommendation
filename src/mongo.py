@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-import nltk 
+import nltk
+nltk.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
@@ -38,7 +39,6 @@ class CollConection:
             else:
                 info[i['user_id']] = info[i['user_id']]+" "+i['message']
         count_vectorizer = CountVectorizer(stop_words='english')
-        count_vectorizer = CountVectorizer()
         sparse_matrix = count_vectorizer.fit_transform(info.values())
         info_matrix = sparse_matrix.todense()
         df = pd.DataFrame(info_matrix, columns=count_vectorizer.get_feature_names(), index=info.keys())

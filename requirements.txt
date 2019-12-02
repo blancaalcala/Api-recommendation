@@ -8,4 +8,4 @@ numpy
 python-dotenv
 cython
 scipy
-
+dnspython
