@@ -1,0 +1,11 @@
+
+bottle
+bson
+pymongo
+nltk
+pandas
+numpy
+python-dotenv
+cython
+scipy
+

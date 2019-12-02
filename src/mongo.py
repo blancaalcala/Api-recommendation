@@ -2,10 +2,13 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 import nltk 
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-import get as G
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity as distance
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 
 sid = SentimentIntensityAnalyzer()
 
@@ -13,7 +16,7 @@ sid = SentimentIntensityAnalyzer()
 class CollConection:
 
     def __init__(self,dbName,collection):
-        self.client = MongoClient()
+        self.client = MongoClient(os.getenv('mongo'))
         self.db = self.client[dbName]
         self.collection=self.db[collection]
     
@@ -70,14 +73,14 @@ class CollConection:
 
     def addMessagetoChat(self,message,user,chat,message_id):
         document = {'message':message}
-        x = list(chself.collection.find({},{'users_list':1,'_id':0}))
+        x = list(self.collection.find({},{'users_list':1,'_id':0}))
         users_list = x[0]['users_list']
         if user in users_list:
             a=self.collection.update(
             {'_id':ObjectId(chat)},
             {'$push':{'messages':message}})
             return message_id
-        else
+        else:
             raise TypeError("The user doesnt belong to this chat")
 
     def getMessages(self,chat):

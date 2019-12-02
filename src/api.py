@@ -36,7 +36,6 @@ def addmessage(chat_id):
 def getchat(chat_id):   
     return collChat.getMessages(chat_id)
 
-
 @get("/chat/<chat_id>/sentiment")
 def getchatsentiment(chat_id):
     return collChat.getChatSentiment(chat_id)
