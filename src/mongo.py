@@ -47,9 +47,10 @@ class CollConection:
         recom = sim_df[user_id].sort_values(ascending=False)[1:]
         users = recom.keys()
         recommendations = {}
-        for i in range(3):
-            recommendations[f"user{i}"] = users[i]
-        return recommendations
+       # for i in range(3):
+        #    print(f'{i}')
+         #   recommendations[f"user{i}"] = users[i]
+        #return recommendations
 
     def addChat(self,chat,user):
         a=self.collection.insert_one({'chatname':chat})

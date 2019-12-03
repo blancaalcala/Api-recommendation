@@ -1,5 +1,6 @@
 from bottle import route, run, get, post, request
 from mongo import CollConection
+import os
 
 @post('/user/create')
 def adduser():
@@ -46,5 +47,6 @@ collUser=CollConection('API','user')
 collChat=CollConection('API','chat')
 collMessage=CollConection('API','message')
 
-run(host='0.0.0.0', port=8080)
-
+port = int(os.getenv('PORT', 8080))
+host = os.getenv('IP','0.0.0.0')
+run(host=host, port=port, debug=True)

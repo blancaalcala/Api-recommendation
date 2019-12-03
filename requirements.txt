@@ -1,6 +1,5 @@
 
 bottle
-bson
 pymongo
 nltk
 pandas
@@ -9,3 +8,4 @@ python-dotenv
 cython
 scipy
 dnspython
+Flask-PyMongo
